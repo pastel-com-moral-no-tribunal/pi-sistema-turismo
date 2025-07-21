@@ -1,47 +1,47 @@
--- Criar banco de dados
-CREATE DATABASE IF NOT EXISTS encantos_db;
+CREATE DATABASE  encantos_db;
 USE encantos_db;
 
--- Tabela de usuários
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
-    tipo ENUM('admin', 'comum') DEFAULT 'comum',
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL
 );
 
--- Tabela de categorias (para eventos e restaurantes)
+
+CREATE TABLE endereco (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  rua VARCHAR(100) NOT NULL,
+  numero INT NOT NULL,
+  bairro VARCHAR(50),
+  cidade VARCHAR(50),
+  estado VARCHAR(2),
+  numero_tel VARCHAR(15)
+);
+
 CREATE TABLE categorias (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL UNIQUE,
     descricao TEXT
 );
 
--- Tabela de eventos
 CREATE TABLE eventos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
-    descricao TEXT,
-    categoria_id INT,
-    data_inicio DATE,
-    data_fim DATE,
-    horario TIME,
-    local VARCHAR(255),
-    endereco VARCHAR(255),
-    preco DECIMAL(10,2),
-    capacidade INT,
-    organizador VARCHAR(255),
-    contato VARCHAR(100),
-    imagem TEXT,
-    criado_por INT,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (categoria_id) REFERENCES categorias(id),
-    FOREIGN KEY (criado_por) REFERENCES usuarios(id)
+    nome VARCHAR(255) NOT NULL,                         
+    descricao TEXT,                                    
+    categoria_id INT,                                   
+    local VARCHAR(255),                              
+    endereco VARCHAR(255),                             
+    organizador VARCHAR(255),                          
+    contato VARCHAR(100),                              
+    imagem TEXT,                                       
+    criado_por INT,                                     
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id), 
+    FOREIGN KEY (criado_por) REFERENCES usuarios(id)       
 );
 
--- Tabela de restaurantes
 CREATE TABLE restaurantes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
@@ -63,7 +63,6 @@ CREATE TABLE restaurantes (
     FOREIGN KEY (criado_por) REFERENCES usuarios(id)
 );
 
--- Tabela de comentários (para eventos e restaurantes)
 CREATE TABLE comentarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
@@ -74,13 +73,11 @@ CREATE TABLE comentarios (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
--- Tabela de tags
 CREATE TABLE tags (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL UNIQUE
 );
 
--- Relacionamento entre eventos e tags
 CREATE TABLE eventos_tags (
     evento_id INT NOT NULL,
     tag_id INT NOT NULL,
@@ -89,7 +86,6 @@ CREATE TABLE eventos_tags (
     FOREIGN KEY (tag_id) REFERENCES tags(id)
 );
 
--- Relacionamento entre restaurantes e tags
 CREATE TABLE restaurantes_tags (
     restaurante_id INT NOT NULL,
     tag_id INT NOT NULL,
